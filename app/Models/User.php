@@ -15,6 +15,13 @@ class User extends Authenticatable
         'email',
         'password',
         'tipo',
+        'anos_experiencia',
+        'localizacao',
+        'formacao',
+        'disponibilidade',
+        'bio',
+        'curriculo_path',
+        'curriculo_nome_original',
     ];
 
     protected $hidden = [
@@ -48,5 +55,54 @@ class User extends Authenticatable
     public function isCandidato(): bool
     {
         return $this->tipo === 'Candidato';
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class);
+    }
+
+    public function temCurriculo(): bool
+    {
+        return ! empty($this->curriculo_path);
+    }
+
+    /**
+     * Filtra candidatos (tipo Candidato) por anos de experiência,
+     * habilidades, localização, formação e disponibilidade.
+     */
+    public function scopeFiltrarCandidatos($query, array $filtros)
+    {
+        return $query->where('tipo', 'Candidato')
+            ->when(
+                $filtros['experiencia_min'] ?? null,
+                fn ($q, $valor) => $q->where('anos_experiencia', '>=', (int) $valor)
+            )
+            ->when(
+                $filtros['localizacao'] ?? null,
+                fn ($q, $valor) => $q->where('localizacao', 'like', "%{$valor}%")
+            )
+            ->when(
+                $filtros['formacao'] ?? null,
+                fn ($q, $valor) => $q->where('formacao', 'like', "%{$valor}%")
+            )
+            ->when(
+                $filtros['disponibilidade'] ?? null,
+                fn ($q, $valor) => $q->where('disponibilidade', $valor)
+            )
+            ->when(
+                $filtros['texto'] ?? null,
+                fn ($q, $valor) => $q->where(function ($sub) use ($valor) {
+                    $sub->where('name', 'like', "%{$valor}%")
+                        ->orWhere('bio', 'like', "%{$valor}%");
+                })
+            )
+            ->when(
+                ! empty($filtros['skills']),
+                fn ($q) => $q->whereHas(
+                    'skills',
+                    fn ($sub) => $sub->whereIn('skills.id', $filtros['skills'])
+                )
+            );
     }
 }

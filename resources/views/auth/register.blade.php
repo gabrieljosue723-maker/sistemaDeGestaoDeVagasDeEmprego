@@ -39,7 +39,7 @@
                            name="tipo"
                            value="Candidato"
                            {{ old('tipo', 'Candidato') === 'Candidato' ? 'checked' : '' }}
-                           class="text-indigo-600 focus:ring-indigo-500">
+                           class="text-neutral-900 focus:ring-neutral-600">
                     <span class="text-sm text-gray-700">Candidato</span>
                 </label>
 
@@ -48,7 +48,7 @@
                            name="tipo"
                            value="Empresa"
                            {{ old('tipo') === 'Empresa' ? 'checked' : '' }}
-                           class="text-indigo-600 focus:ring-indigo-500">
+                           class="text-neutral-900 focus:ring-neutral-600">
                     <span class="text-sm text-gray-700">Empresa</span>
                 </label>
             </div>
@@ -81,7 +81,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-6">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900"
+            <a class="underline text-sm text-neutral-600 hover:text-gray-900"
                href="{{ route('login') }}">
                 {{ __('Já tem conta?') }}
             </a>

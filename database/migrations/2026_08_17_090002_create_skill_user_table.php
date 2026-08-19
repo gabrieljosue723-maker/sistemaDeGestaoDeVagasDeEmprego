@@ -8,18 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vagas', function (Blueprint $table) {
+        Schema::create('skill_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('titulo');
-            $table->text('descricao');
-            $table->string('localizacao');
+            $table->foreignId('skill_id')->constrained()->onDelete('cascade');
+            $table->unique(['user_id', 'skill_id']);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('vagas');
+        Schema::dropIfExists('skill_user');
     }
 };

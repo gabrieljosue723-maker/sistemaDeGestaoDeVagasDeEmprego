@@ -2,29 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vaga;
 use App\Http\Requests\VagaRequest;
+use App\Models\Vaga;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class VagaController extends Controller
 {
-    public function explorar(Request $request)
-    {
-        $vagas = Vaga::with('empresa')
-            ->when($request->busca, fn($q) => $q->busca($request->busca))
-            ->latest()
-            ->paginate(12);
-
-        return view('vagas.explorar', compact('vagas'));
-    }
-
     public function index(Request $request)
     {
         $vagas = Vaga::with('empresa')
-            ->when($request->busca, fn($q) => $q->busca($request->busca))
+            ->when($request->busca, fn ($q) => $q->busca($request->busca))
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('vagas.index', compact('vagas'));
     }

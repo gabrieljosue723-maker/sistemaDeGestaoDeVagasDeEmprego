@@ -4,51 +4,51 @@
 @section('content')
     <div class="max-w-3xl mx-auto">
 
-        <h1 class="text-2xl font-bold mb-2">{{ auth()->user()->name }}</h1>
-        <p class="text-gray-500 text-sm mb-8">
-            Conta do tipo: <span class="font-medium text-indigo-600">{{ auth()->user()->tipo }}</span>
+        <h1 class="text-2xl font-bold mb-2 text-neutral-900">{{ auth()->user()->name }}</h1>
+        <p class="text-neutral-500 text-sm mb-8">
+            Conta do tipo: <span class="font-semibold text-neutral-800">{{ auth()->user()->tipo }}</span>
         </p>
-
 
         @if(auth()->user()->isEmpresa())
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-                <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Vagas publicadas</p>
-                    <p class="text-3xl font-bold text-indigo-600 mt-1">
+                <div class="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm">
+                    <p class="text-sm text-neutral-500">Vagas publicadas</p>
+                    <p class="text-3xl font-bold text-neutral-900 mt-1">
                         {{ auth()->user()->vagas()->count() }}
                     </p>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total de candidaturas recebidas</p>
-                    <p class="text-3xl font-bold text-indigo-600 mt-1">
+                <div class="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm">
+                    <p class="text-sm text-neutral-500">Total de candidaturas recebidas</p>
+                    <p class="text-3xl font-bold text-neutral-900 mt-1">
                         {{ auth()->user()->vagas()->withCount('candidaturas')->get()->sum('candidaturas_count') }}
                     </p>
                 </div>
             </div>
 
-            <h2 class="text-lg font-semibold mb-3">As suas vagas</h2>
+            <h2 class="text-lg font-semibold mb-3 text-neutral-900">As suas vagas</h2>
             @forelse(auth()->user()->vagas()->withCount('candidaturas')->latest()->get() as $vaga)
-                <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 flex items-center justify-between shadow-sm">
+                <div class="bg-white border border-neutral-200 rounded-lg p-4 mb-3 flex items-center justify-between shadow-sm">
                     <div>
                         <a href="{{ route('vagas.show', $vaga) }}"
-                            class="font-medium text-indigo-700 hover:underline">{{ $vaga->titulo }}</a>
-                        <p class="text-xs text-gray-400 mt-0.5">
-                            {{ $vaga->localizacao }} · {{ $vaga->candidaturas_count }} candidatura(s)
+                            class="font-medium text-neutral-900 hover:underline">{{ $vaga->titulo }}</a>
+                        <p class="text-xs text-neutral-400 mt-0.5">
+                            {{ $vaga->localizacao }} &middot; {{ $vaga->candidaturas_count }} candidatura(s)
                         </p>
                     </div>
-                    <a href="{{ route('vagas.show', $vaga) }}" class="text-sm text-gray-500 hover:text-indigo-600">Ver →</a>
+                    <a href="{{ route('vagas.show', $vaga) }}" class="text-sm text-neutral-500 hover:text-neutral-900">Ver &rarr;</a>
                 </div>
             @empty
-                <p class="text-gray-400 text-sm">Ainda não publicou nenhuma vaga.</p>
+                <p class="text-neutral-400 text-sm">Ainda não publicou nenhuma vaga.</p>
             @endforelse
 
-            <div class="mt-6">
-                <a href="{{ route('vagas.create') }}"
-                    class="bg-indigo-600 text-white px-5 py-2 rounded-md text-sm hover:bg-indigo-700">
+            <div class="mt-6 flex gap-3">
+                <x-button-link :href="route('vagas.create')" variant="dark">
                     Publicar Nova Vaga
-                </a>
+                </x-button-link>
+                <x-button-link :href="route('candidatos.index')" variant="light">
+                    Pesquisar Candidatos
+                </x-button-link>
             </div>
-
 
         @elseif(auth()->user()->isCandidato())
             @php
@@ -58,50 +58,51 @@
             @endphp
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-                <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Candidaturas enviadas</p>
-                    <p class="text-3xl font-bold text-indigo-600 mt-1">{{ $candidaturas->count() }}</p>
+                <div class="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm">
+                    <p class="text-sm text-neutral-500">Candidaturas enviadas</p>
+                    <p class="text-3xl font-bold text-neutral-900 mt-1">{{ $candidaturas->count() }}</p>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Pendentes</p>
-                    <p class="text-3xl font-bold text-yellow-500 mt-1">{{ $pendentes }}</p>
+                <div class="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm">
+                    <p class="text-sm text-neutral-500">Pendentes</p>
+                    <p class="text-3xl font-bold text-neutral-500 mt-1">{{ $pendentes }}</p>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Aceites</p>
-                    <p class="text-3xl font-bold text-green-600 mt-1">{{ $aceites }}</p>
+                <div class="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm">
+                    <p class="text-sm text-neutral-500">Aceites</p>
+                    <p class="text-3xl font-bold text-neutral-900 mt-1">{{ $aceites }}</p>
                 </div>
             </div>
 
-            <h2 class="text-lg font-semibold mb-3">Candidaturas recentes</h2>
+            @unless(auth()->user()->temCurriculo())
+                <div class="bg-neutral-900 text-white rounded-lg px-5 py-4 mb-6 flex items-center justify-between gap-4">
+                    <p class="text-sm">Ainda não enviou o seu currículo em PDF. Empresas não conseguem consultá-lo.</p>
+                    <x-button-link :href="route('profile.edit')" variant="light" class="shrink-0">
+                        Adicionar currículo
+                    </x-button-link>
+                </div>
+            @endunless
+
+            <h2 class="text-lg font-semibold mb-3 text-neutral-900">Candidaturas recentes</h2>
             @forelse($candidaturas->take(5) as $candidatura)
-                <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 flex items-center justify-between shadow-sm">
+                <div class="bg-white border border-neutral-200 rounded-lg p-4 mb-3 flex items-center justify-between shadow-sm">
                     <div>
-                        <a href="{{ route('vagas.show', $candidatura->vaga) }}" class="font-medium text-indigo-700 hover:underline">
+                        <a href="{{ route('vagas.show', $candidatura->vaga) }}" class="font-medium text-neutral-900 hover:underline">
                             {{ $candidatura->vaga->titulo }}
                         </a>
-                        <p class="text-xs text-gray-400 mt-0.5">{{ $candidatura->vaga->localizacao }}</p>
+                        <p class="text-xs text-neutral-400 mt-0.5">{{ $candidatura->vaga->localizacao }}</p>
                     </div>
-                    <span
-                        class="text-xs px-2 py-1 rounded-full
-                                                                                            @if($candidatura->status === 'aceite') bg-green-100 text-green-700
-                                                                                            @elseif($candidatura->status === 'rejeitado') bg-red-100 text-red-600
-                                                                                            @else bg-yellow-100 text-yellow-700 @endif">
-                        {{ ucfirst($candidatura->status) }}
-                    </span>
+                    <x-status-badge :status="$candidatura->status" />
                 </div>
             @empty
-                <p class="text-gray-400 text-sm">Ainda não se candidatou a nenhuma vaga.</p>
+                <p class="text-neutral-400 text-sm">Ainda não se candidatou a nenhuma vaga.</p>
             @endforelse
 
             <div class="mt-6 flex gap-3">
-                <a href="{{ route('vagas.index') }}"
-                    class="bg-indigo-600 text-white px-5 py-2 rounded-md text-sm hover:bg-indigo-700">
+                <x-button-link :href="route('vagas.index')" variant="dark">
                     Ver todas as vagas
-                </a>
-                <a href="{{ route('candidaturas.minhas') }}"
-                    class="border border-gray-300 text-gray-600 px-5 py-2 rounded-md text-sm hover:bg-gray-50">
+                </x-button-link>
+                <x-button-link :href="route('candidaturas.minhas')" variant="light">
                     Todas as candidaturas
-                </a>
+                </x-button-link>
             </div>
         @endif
 

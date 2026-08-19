@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Efeito "hoverRipple": uma onda cinza-clara que se expande a partir do
+ * ponto onde o rato entra no botão. Só acontece no hover — não no click,
+ * não no foco — para não duplicar feedback visual em interações de teclado.
+ * Propositadamente sem custom properties em :root: as cores estão sempre
+ * definidas diretamente nas classes/regras que as usam.
+ */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.btn-ripple .ripple-effect {
+    position: absolute;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(0);
+    pointer-events: none;
+    animation: btnRippleAnim 650ms ease-out forwards;
+    z-index: 0;
+}
+
+.btn-ripple.btn-ripple--light .ripple-effect {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.btn-ripple > * {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes btnRippleAnim {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-ripple .ripple-effect {
+        animation: none;
+        display: none;
+    }
+}

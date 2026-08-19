@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Skill;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -16,8 +18,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $skills = Skill::orderBy('nome')->get();
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'skills' => $skills,
         ]);
     }
 
@@ -26,13 +31,38 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $dados = $request->validated();
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // O upload e as skills são tratados à parte, não fazem parte do fill direto.
+        unset($dados['curriculo'], $dados['skills']);
+
+        $user->fill($dados);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        if ($user->isCandidato()) {
+            if ($request->hasFile('curriculo')) {
+                // Remove o currículo antigo antes de guardar o novo.
+                if ($user->curriculo_path) {
+                    Storage::disk('public')->delete($user->curriculo_path);
+                }
+
+                $ficheiro = $request->file('curriculo');
+                $caminho = $ficheiro->store('curriculos', 'public');
+
+                $user->curriculo_path = $caminho;
+                $user->curriculo_nome_original = $ficheiro->getClientOriginalName();
+            }
+
+            $user->save();
+
+            $user->skills()->sync($request->input('skills', []));
+        } else {
+            $user->save();
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

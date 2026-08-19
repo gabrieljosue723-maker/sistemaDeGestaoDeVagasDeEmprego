@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vaga;
 use App\Models\Candidatura;
+use App\Models\Vaga;
 use Illuminate\Http\Request;
 
 class CandidaturaController extends Controller
@@ -25,7 +25,7 @@ class CandidaturaController extends Controller
         $this->authorize('atualizar', $candidatura);
 
         $request->validate([
-            'status' => ['required', 'in:' . implode(',', Candidatura::statusValidos())],
+            'status' => ['required', 'in:'.implode(',', Candidatura::statusValidos())],
         ]);
 
         $candidatura->update(['status' => $request->status]);

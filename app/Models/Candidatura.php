@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Candidatura extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'vaga_id',
@@ -13,7 +16,9 @@ class Candidatura extends Model
     ];
 
     public const STATUS_PENDENTE = 'pendente';
+
     public const STATUS_ACEITE = 'aceite';
+
     public const STATUS_REJEITADO = 'rejeitado';
 
     public static function statusValidos(): array

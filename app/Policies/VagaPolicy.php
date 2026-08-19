@@ -7,7 +7,6 @@ use App\Models\Vaga;
 
 class VagaPolicy
 {
-
     public function create(User $user): bool
     {
         return $user->isEmpresa();
@@ -17,7 +16,6 @@ class VagaPolicy
     {
         return $user->isEmpresa() && $user->id === $vaga->user_id;
     }
-
 
     public function delete(User $user, Vaga $vaga): bool
     {
