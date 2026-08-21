@@ -26,6 +26,7 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
 
         if ($this->user()->isCandidato()) {
@@ -51,6 +52,8 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'curriculo.mimes' => 'O currículo deve ser um ficheiro PDF.',
             'curriculo.max' => 'O currículo não pode ultrapassar 5MB.',
+            'foto.image' => 'A foto deve ser uma imagem (JPG, PNG ou WEBP).',
+            'foto.max' => 'A imagem não pode ultrapassar 2MB.',
             'anos_experiencia.integer' => 'Indique um número de anos válido.',
             'anos_experiencia.max' => 'O número de anos de experiência parece inválido.',
         ];

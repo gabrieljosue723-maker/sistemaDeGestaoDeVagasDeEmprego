@@ -11,9 +11,12 @@
         </div>
 
         <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
-            <div class="px-7 py-6 bg-neutral-900">
-                <h1 class="text-2xl font-bold text-white leading-snug">{{ $candidato->name }}</h1>
-                <p class="text-neutral-300 text-sm mt-1">{{ $candidato->email }}</p>
+            <div class="px-7 py-6 bg-neutral-900 flex items-center gap-4">
+                <x-avatar :user="$candidato" size="lg" class="border-neutral-700" />
+                <div class="min-w-0">
+                    <h1 class="text-2xl font-bold text-white leading-snug">{{ $candidato->name }}</h1>
+                    <p class="text-neutral-300 text-sm mt-1">{{ $candidato->email }}</p>
+                </div>
             </div>
 
             <div class="px-7 py-6 space-y-5">

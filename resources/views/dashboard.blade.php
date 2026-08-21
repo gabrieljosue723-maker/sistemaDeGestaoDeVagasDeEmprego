@@ -4,10 +4,15 @@
 @section('content')
     <div class="max-w-3xl mx-auto">
 
-        <h1 class="text-2xl font-bold mb-2 text-neutral-900">{{ auth()->user()->name }}</h1>
-        <p class="text-neutral-500 text-sm mb-8">
-            Conta do tipo: <span class="font-semibold text-neutral-800">{{ auth()->user()->tipo }}</span>
-        </p>
+        <div class="flex items-center gap-4 mb-8">
+            <x-avatar :user="auth()->user()" size="lg" />
+            <div>
+                <h1 class="text-2xl font-bold text-neutral-900">{{ auth()->user()->name }}</h1>
+                <p class="text-neutral-500 text-sm">
+                    Conta do tipo: <span class="font-semibold text-neutral-800">{{ auth()->user()->tipo }}</span>
+                </p>
+            </div>
+        </div>
 
         @if(auth()->user()->isEmpresa())
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">

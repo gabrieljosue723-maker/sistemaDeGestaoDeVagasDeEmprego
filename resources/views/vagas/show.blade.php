@@ -12,12 +12,15 @@
 
         <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden mb-5">
 
-            <div class="px-7 py-6 bg-neutral-900">
-                <p class="text-neutral-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                    {{ $vaga->localizacao }}
-                </p>
-                <h1 class="text-2xl font-bold text-white leading-snug">{{ $vaga->titulo }}</h1>
-                <p class="text-neutral-300 text-sm mt-1">{{ $vaga->empresa->name }}</p>
+            <div class="px-7 py-6 bg-neutral-900 flex items-start gap-4">
+                <x-avatar :user="$vaga->empresa" size="lg" class="border-neutral-700" />
+                <div class="min-w-0">
+                    <p class="text-neutral-400 text-xs font-semibold uppercase tracking-wider mb-1">
+                        {{ $vaga->localizacao }}
+                    </p>
+                    <h1 class="text-2xl font-bold text-white leading-snug">{{ $vaga->titulo }}</h1>
+                    <p class="text-neutral-300 text-sm mt-1">{{ $vaga->empresa->name }}</p>
+                </div>
             </div>
 
             <div class="px-7 py-2 bg-neutral-100 border-b border-neutral-200 flex items-center justify-between">
@@ -95,19 +98,22 @@
 
                     @forelse($vaga->candidaturas as $cand)
                         <div class="px-6 py-4 border-b border-neutral-100 last:border-0 flex items-center justify-between gap-4">
-                            <div class="min-w-0">
-                                <a href="{{ route('candidatos.show', $cand->candidato) }}" class="text-sm font-semibold text-neutral-900 hover:underline">
-                                    {{ $cand->candidato->name }}
-                                </a>
-                                <p class="text-xs text-neutral-400">{{ $cand->candidato->email }}</p>
-                                @if($cand->candidato->temCurriculo())
-                                    <a href="{{ route('curriculo.download', $cand->candidato) }}"
-                                        class="text-xs text-neutral-600 underline underline-offset-2 hover:text-neutral-900">
-                                        Ver currículo (PDF)
+                            <div class="flex items-center gap-3 min-w-0">
+                                <x-avatar :user="$cand->candidato" size="sm" />
+                                <div class="min-w-0">
+                                    <a href="{{ route('candidatos.show', $cand->candidato) }}" class="text-sm font-semibold text-neutral-900 hover:underline">
+                                        {{ $cand->candidato->name }}
                                     </a>
-                                @else
-                                    <span class="text-xs text-neutral-300">Sem currículo enviado</span>
-                                @endif
+                                    <p class="text-xs text-neutral-400">{{ $cand->candidato->email }}</p>
+                                    @if($cand->candidato->temCurriculo())
+                                        <a href="{{ route('curriculo.download', $cand->candidato) }}"
+                                            class="text-xs text-neutral-600 underline underline-offset-2 hover:text-neutral-900">
+                                            Ver currículo (PDF)
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-neutral-300">Sem currículo enviado</span>
+                                    @endif
+                                </div>
                             </div>
                             <div class="flex items-center gap-3 shrink-0">
                                 <x-status-badge :status="$cand->status" />

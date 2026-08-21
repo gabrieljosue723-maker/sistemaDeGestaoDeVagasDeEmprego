@@ -43,8 +43,9 @@
                         Dashboard
                     </a>
 
-                    <a href="{{ route('profile.edit') }}" class="text-neutral-300 hover:text-white transition-colors">
-                        Perfil
+                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 text-neutral-300 hover:text-white transition-colors">
+                        <x-avatar :user="auth()->user()" size="sm" />
+                        <span class="hidden sm:inline">Perfil</span>
                     </a>
 
                     <form method="POST" action="{{ route('logout') }}">

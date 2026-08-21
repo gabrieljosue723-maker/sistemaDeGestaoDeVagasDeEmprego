@@ -35,12 +35,21 @@ class ProfileController extends Controller
         $user = $request->user();
 
         // O upload e as skills são tratados à parte, não fazem parte do fill direto.
-        unset($dados['curriculo'], $dados['skills']);
+        unset($dados['curriculo'], $dados['skills'], $dados['foto']);
 
         $user->fill($dados);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
+        }
+
+        // Foto de perfil (candidato) ou logótipo (empresa) — comum aos dois tipos de conta.
+        if ($request->hasFile('foto')) {
+            if ($user->foto_path) {
+                Storage::disk('public')->delete($user->foto_path);
+            }
+
+            $user->foto_path = $request->file('foto')->store('fotos', 'public');
         }
 
         if ($user->isCandidato()) {
@@ -65,6 +74,21 @@ class ProfileController extends Controller
         }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Remove a foto de perfil / logótipo do utilizador autenticado.
+     */
+    public function destroyFoto(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->foto_path) {
+            Storage::disk('public')->delete($user->foto_path);
+            $user->update(['foto_path' => null]);
+        }
+
+        return back()->with('status', 'foto-removida');
     }
 
     /**

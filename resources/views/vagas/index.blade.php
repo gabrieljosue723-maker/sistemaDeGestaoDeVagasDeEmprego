@@ -37,18 +37,21 @@
     @forelse($vagas as $vaga)
         <div class="bg-white border border-neutral-200 rounded-2xl p-6 mb-4 shadow-sm">
             <div class="flex items-start justify-between gap-4">
-                <div class="flex-1 min-w-0">
-                    <h2 class="text-base font-bold text-neutral-900 mb-0.5">
-                        <a href="{{ route('vagas.show', $vaga) }}" class="hover:underline transition-colors">
-                            {{ $vaga->titulo }}
-                        </a>
-                    </h2>
-                    <p class="text-sm text-neutral-500">
-                        {{ $vaga->empresa->name }}
-                        <span class="mx-1 text-neutral-300">&middot;</span>
-                        {{ $vaga->localizacao }}
-                    </p>
-                    <p class="text-neutral-600 mt-3 text-sm leading-relaxed line-clamp-2">{{ $vaga->descricao }}</p>
+                <div class="flex items-start gap-3 flex-1 min-w-0">
+                    <x-avatar :user="$vaga->empresa" size="md" class="mt-0.5" />
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-base font-bold text-neutral-900 mb-0.5">
+                            <a href="{{ route('vagas.show', $vaga) }}" class="hover:underline transition-colors">
+                                {{ $vaga->titulo }}
+                            </a>
+                        </h2>
+                        <p class="text-sm text-neutral-500">
+                            {{ $vaga->empresa->name }}
+                            <span class="mx-1 text-neutral-300">&middot;</span>
+                            {{ $vaga->localizacao }}
+                        </p>
+                        <p class="text-neutral-600 mt-3 text-sm leading-relaxed line-clamp-2">{{ $vaga->descricao }}</p>
+                    </div>
                 </div>
                 <span class="shrink-0 text-xs text-neutral-400 whitespace-nowrap pt-0.5">
                     {{ $vaga->created_at->diffForHumans() }}

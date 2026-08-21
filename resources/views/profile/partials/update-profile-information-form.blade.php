@@ -47,6 +47,29 @@
             @endif
         </div>
 
+        <div class="pt-2">
+            <x-input-label value="{{ $user->isEmpresa() ? 'Logótipo da empresa' : 'Foto de perfil' }}" />
+
+            <div class="mt-2 flex items-center gap-4">
+                <x-avatar :user="$user" size="lg" />
+
+                <div>
+                    <input id="foto" name="foto" type="file" accept="image/png, image/jpeg, image/webp"
+                        class="block text-sm text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-white hover:file:bg-black file:cursor-pointer" />
+                    <p class="text-xs text-neutral-400 mt-1">JPG, PNG ou WEBP, máx. 2MB.</p>
+
+                    @if($user->temFoto())
+                        <form method="POST" action="{{ route('foto.destroy') }}"
+                            onsubmit="return confirm('Remover a imagem atual?')" class="mt-1">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-ripple btn-ripple--light text-xs text-neutral-500 hover:text-neutral-900">Remover imagem</button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('foto')" />
+        </div>
+
         @if($user->isCandidato())
             <div class="pt-6 border-t border-neutral-200">
                 <h3 class="text-sm font-bold text-neutral-800 uppercase tracking-wide mb-4">Perfil Profissional</h3>

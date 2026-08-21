@@ -79,13 +79,16 @@
         @forelse($candidatos as $candidato)
             <div class="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm flex flex-col">
                 <div class="flex items-start justify-between gap-3">
-                    <div class="min-w-0">
-                        <a href="{{ route('candidatos.show', $candidato) }}" class="text-base font-bold text-neutral-900 hover:underline">
-                            {{ $candidato->name }}
-                        </a>
-                        <p class="text-xs text-neutral-400">
-                            {{ $candidato->localizacao ?? 'Localização não indicada' }}
-                        </p>
+                    <div class="flex items-start gap-3 min-w-0">
+                        <x-avatar :user="$candidato" size="sm" class="mt-0.5" />
+                        <div class="min-w-0">
+                            <a href="{{ route('candidatos.show', $candidato) }}" class="text-base font-bold text-neutral-900 hover:underline">
+                                {{ $candidato->name }}
+                            </a>
+                            <p class="text-xs text-neutral-400">
+                                {{ $candidato->localizacao ?? 'Localização não indicada' }}
+                            </p>
+                        </div>
                     </div>
                     @if(!is_null($candidato->anos_experiencia))
                         <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-neutral-200 text-neutral-800">
